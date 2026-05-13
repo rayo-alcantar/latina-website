@@ -14,147 +14,125 @@
     <meta property="og:url" content="https://latinalive.net/">
     <meta property="og:image" content="/img/logo.jpg">
 
-    <link rel="canonical" href="https://latinalive.net/">
-
     <link rel="icon" href="/img/logo.jpg">
-    <link rel="apple-touch-icon" href="/img/logo.jpg">
     <link rel="manifest" href="/img/site.webmanifest">
-    <meta name="theme-color" content="#1a1a1a">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <link rel="stylesheet" href="/css/custom.css">
 
-    <style>
-        /* Init theme early to prevent flash of wrong theme */
-    </style>
     <script>
-        // Check for saved theme preference
-        const savedTheme = localStorage.getItem('theme') || 'dark';
+        // Check for saved theme preference (Keeping for compatibility)
+        const savedTheme = localStorage.getItem('theme') || 'light';
         document.documentElement.setAttribute('data-theme', savedTheme);
     </script>
 </head>
 
 <body>
-    <a href="#main-content" class="skip-link">Saltar al contenido principal</a>
-
-    <nav class="site-nav" aria-label="Navegación principal">
-        <ul>
-            <li><a href="/" {% if page.url == "/" %}aria-current="page"{% endif %}>Inicio</a></li>
-            <li><a href="/trends-suggestions/" {% if page.url == "/trends-suggestions/" %}aria-current="page"{% endif %}>Tendencias</a></li>
-            <li><a href="/sociales/" {% if page.url == "/sociales/" %}aria-current="page"{% endif %}>Redes Sociales</a></li>
-            <li><a href="/contact/" {% if page.url == "/contact/" %}aria-current="page"{% endif %}>Contacto</a></li>
-        </ul>
-    </nav>
-
-    <header class="welcome-section">
-        <img src="/img/logo.jpg" alt="Logotipo de Latina Live: Micrófono animado con auriculares" loading="eager">
-        <div class="h2-style">¡Latina Live!</div>
-        <p>¡Bienvenido a tu apertura auditiva!</p>
+    <header class="site-header" role="banner">
+        <img src="/img/logo.jpg" alt="Logotipo de Latina Live" loading="eager">
+        <p class="slogan">Tu alma, tu música</p>
     </header>
 
-    <!-- Persistent Player Section (Moved from index.html) -->
-    <section class="player-container text-center" id="persistent-player" aria-labelledby="player-title">
-      <h1 id="player-title">¡Sintonízate con nosotros!</h1>
-      <p class="mb-4">Vibra en nuestra onda...</p>
-      <p>Actualmente: <span id="nombre-locutor" style="font-weight:bold; color:var(--brand-primary);">Cargando...</span></p>
-
-      <div class="audio-player">
-        <audio id="audio" controls autoplay preload="none" src="https://radios.latinalive.net/listen/latina/live">
-          Tu navegador no soporta el elemento de audio.
-        </audio>
-        <div class="track-info" id="track-info"
-          style="font-weight: 600; font-size: 1.2rem; color: var(--brand-primary);">
-          Cargando información...
-        </div>
-
-        <div class="controls" style="margin: 1rem 0; display: flex; gap: 1rem; justify-content: center;">
-          <button id="lowerVolumeBtn" aria-label="Bajar volumen" class="btn" style="padding: 0.8rem 1.5rem;">- Vol</button>
-          <button id="raiseVolumeBtn" aria-label="Subir volumen" class="btn" style="padding: 0.8rem 1.5rem;">+ Vol</button>
-        </div>
-        <div class="volume-display" id="volume-display"
-          style="font-size: 1rem; color: var(--text-muted); transition: transform 0.2s;">
-          Volumen: 100%
-        </div>
-
-        <div style="margin-top: 1.5rem;">
-          <a href="/stream.m3u" class="external-player-link" style="font-size: 0.9rem; text-decoration: underline;">Reproductor Externo</a>
-        </div>
-      </div>
-    </section>
-
-    <main id="swup" class="transition-fade">
+    <main id="main-content">
         {{ content | safe }}
     </main>
 
-    <button id="theme-toggle" class="theme-toggle-btn" aria-label="Cambiar modo claro/oscuro">
-        <span id="theme-icon">🌙</span>
-    </button>
-
-    <footer class="site-footer" aria-label="Pie de página">
-        <p>&copy; 2026 Latina live. Todos los derechos reservados.</p>
-        <nav aria-label="Enlaces legales">
-            <a href="/privacy/">Política de Privacidad</a>
-            <a href="/terminos/">Términos y condiciones</a>
+    <footer class="site-footer" role="contentinfo">
+        <p>&copy; 2023 - 2026 Latina Live. Todos los derechos reservados.</p>
+        <p style="margin-bottom: 1rem;">Tu alma, tu música. 📻</p>
+        <nav aria-label="Enlaces legales" style="display: flex; justify-content: center; gap: 1.5rem; font-size: 0.9rem;">
+            <a href="/privacy/" style="color: var(--color-navy); text-decoration: underline;">Política de Privacidad</a>
+            <a href="/terminos/" style="color: var(--color-navy); text-decoration: underline;">Términos y Condiciones</a>
         </nav>
     </footer>
 
-    <!-- Schema Markup -->
-    <script type="application/ld+json">
-    {
-      "@context": "https://schema.org",
-      "@type": "RadioStation",
-      "name": "Latina Live",
-      "url": "https://latinalive.net",
-      "logo": "https://latinalive.net/img/logo.jpg",
-      "description": "Tu alma, tu música. Radio latina con la mejor música en vivo.",
-      "sameAs": [
-        "https://facebook.com/latinalive",
-        "https://instagram.com/latinalive"
-      ]
-    }
-    </script>
-    
+
+    <!-- Persistent Mini-Player Bar -->
+    <div id="mini-player-bar" class="persistent-controls hidden" aria-label="Control rápido de radio">
+        <div class="mini-info">
+            <span id="mini-locutor" style="font-weight: bold;">Latina Live</span>
+            <span id="mini-track" style="font-size: 0.75rem; opacity: 0.8;">Sintonizando...</span>
+        </div>
+        <div class="mini-btns">
+            <button id="miniPlayPauseBtn" class="btn-mini" aria-label="Reproducir / Pausar">
+                <i class="fas fa-play"></i>
+            </button>
+            <button onclick="navigateToScreen(1)" class="btn-mini" aria-label="Ir al inicio">
+                <i class="fas fa-home"></i>
+            </button>
+        </div>
+    </div>
+
+
     <!-- Scripts -->
-    <script src="https://unpkg.com/swup@4"></script>
     <script src="/scripts/player.js" defer></script>
     <script type="module" src="/scripts/notificaciones.js" defer></script>
     
     <script>
-    // Initialize Locutor Update (Persistent)
-    async function actualizarLocutor() {
-        try {
-            const respuesta = await fetch('/api/estado');
-            const datos = await respuesta.json();
-            const locutorEl = document.getElementById('nombre-locutor');
-            if(locutorEl) locutorEl.innerText = datos.locutor;
-        } catch (error) {
-            console.log("Locutor update failed", error);
+    // SPA Screen Management
+    function showScreen(screenNumber) {
+        // Hide all screens
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        // Show target screen
+        const target = document.getElementById(`screen-${screenNumber}`);
+        if(target) {
+            target.classList.add('active');
+            window.scrollTo(0, 0);
         }
-    }
-    // Run once and interval
-    actualizarLocutor();
-    setInterval(actualizarLocutor, 10000);
+        
+        // Mini-player visibility: Hide on screen 1, show on others
+        const miniBar = document.getElementById('mini-player-bar');
+        if(miniBar) {
+            if(screenNumber == 1) {
+                miniBar.classList.add('hidden');
+            } else {
+                miniBar.classList.remove('hidden');
+            }
+        }
 
-    // Initialize Swup
-    const swup = new Swup({
-        containers: ["#swup"]
+        // Dynamic focus for accessibility
+        const firstElement = target.querySelector('h1, h2, input, button');
+        if(firstElement) firstElement.focus();
+    }
+
+
+    // Initialize first screen or from hash
+    document.addEventListener('DOMContentLoaded', () => {
+        const hash = window.location.hash.replace('#', '');
+        if(hash && document.getElementById(`screen-${hash}`)) {
+            showScreen(hash);
+        } else {
+            showScreen(1);
+        }
+
+        // Initialize Chat if on screen 2
+        // We'll call this when switching to screen 2
     });
 
-    // Re-run scripts on content replace
-    async function initPageScripts() {
-        window.scrollTo(0, 0);
+    // Navigation overrides
+    window.addEventListener('popstate', (event) => {
+        if(event.state && event.state.screen) {
+            showScreen(event.state.screen);
+        }
+    });
+
+    function navigateToScreen(n) {
+        history.pushState({screen: n}, `Screen ${n}`, `#${n}`);
+        showScreen(n);
         
-        // Dynamic Import of Chat logic if element exists
-        const chatBox = document.getElementById('chat-container');
+        if(n === 2) {
+            initChatOnScreen2();
+        }
+    }
+
+    async function initChatOnScreen2() {
+        const chatBox = document.getElementById('chat-box');
         if(chatBox) {
-            // Clear old interval if exists
-            if(window.chatInterval) clearInterval(window.chatInterval);
-            
             try {
-                // Use a timestamp to force module reload or just rely on function export
                 const module = await import('/scripts/chat.js');
                 if(module && module.initChat) {
                     module.initChat();
@@ -165,42 +143,21 @@
         }
     }
 
-    swup.hooks.on('content:replace', initPageScripts);
-    
-    // Run on initial load too
-    document.addEventListener('DOMContentLoaded', initPageScripts);
-
-    // Navbar Scrolled State
-    const nav = document.querySelector('.site-nav');
-    window.addEventListener('scroll', () => {
-        if (window.scrollY > 50) {
-            nav.classList.add('scrolled');
-        } else {
-            nav.classList.remove('scrolled');
+    // Initialize Locutor Update (Persistent)
+    async function actualizarLocutor() {
+        try {
+            // RESTAURADO: Ruta absoluta
+            const respuesta = await fetch('https://latinalive.net/api/estado');
+            const datos = await respuesta.json();
+            const locutorEl = document.getElementById('nombre-locutor');
+            if(locutorEl) locutorEl.innerText = datos.locutor;
+        } catch (error) {
+            console.log("Locutor update failed", error);
         }
-    });
-
-    // Theme Toggle Logic
-    const toggleBtn = document.getElementById('theme-toggle');
-    const themeIcon = document.getElementById('theme-icon');
-    
-    if(toggleBtn) {
-        toggleBtn.addEventListener('click', () => {
-            let currentTheme = document.documentElement.getAttribute('data-theme');
-            let newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-            
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
-            updateIcon(newTheme);
-        });
     }
 
-    function updateIcon(theme) {
-        if(themeIcon) themeIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-    }
-    
-    // Init Icon
-    updateIcon(document.documentElement.getAttribute('data-theme'));
+    actualizarLocutor();
+    setInterval(actualizarLocutor, 10000);
     </script>
 </body>
 </html>

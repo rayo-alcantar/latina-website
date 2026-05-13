@@ -1,46 +1,176 @@
 ---
 layout: base.njk
-title: Latina live. ¡tu alma, tu música!
+title: Latina Live - Tu alma, tu música
 ---
 
-<!-- Player moved to base.njk for continuous playback -->
+<!-- Screen 1: Reproductor e Inicio -->
+<div id="screen-1" class="screen active" aria-labelledby="screen-1-title">
+    <section class="player-controls text-center">
+        <h1 id="screen-1-title" class="hidden">Inicio - Reproductor</h1>
+        
+        <div class="status-info mb-4">
+            <p>Sintonizando: <span id="nombre-locutor" style="font-weight:bold;">Cargando...</span></p>
+            <div id="track-info" class="mb-4" style="font-weight: 600; font-size: 1.2rem;">Cargando información...</div>
+            <p style="margin-top: 1rem; color: var(--color-navy); font-size: 1rem;">¡Queremos escucharte! Chatea, manda un audio o pide tu canción favorita.</p>
+        </div>
 
-<section class="requests-section card text-center" aria-labelledby="requests-title"
-  style="border: 2px solid var(--brand-primary);">
-  <h2 id="requests-title">Pide tu Canción</h2>
-  <p>¡Queremos escucharte! pedir tu canción favorita es fácil...</p>
-  <a href="/pedidos/" class="btn" style="margin-top: 1rem; font-size: 1.2rem;">Hacer un Pedido</a>
-</section>
+        <div class="audio-interface">
+            <audio id="audio" preload="none" src="https://radios.latinalive.net/listen/latina/live">
+                Tu navegador no soporta el elemento de audio.
+            </audio>
+            
+            <div class="row-controls">
+                <button id="playPauseBtn" class="btn" aria-label="Reproducir / Pausar">
+                    <i class="fas fa-play"></i> Play / Pausa
+                </button>
+                
+                <div class="volume-control" style="display: flex; align-items: center; gap: 1rem;">
+                    <i class="fas fa-volume-up" aria-hidden="true"></i>
+                    <input type="range" id="volumeSlider" class="volume-slider" min="0" max="1" step="0.01" value="1" aria-label="Control de volumen">
+                </div>
+            </div>
+        </div>
 
-<section class="chat-section card" aria-labelledby="chat-title" role="region">
-  <h2 id="chat-title" class="text-center">Chat en Vivo</h2>
+        <div style="margin-top: 3rem;">
+            <button onclick="navigateToScreen(2)" class="btn" style="background-color: var(--color-royal-blue);">
+                <i class="fas fa-comments"></i> Únete a la Cabina
+            </button>
+        </div>
+    </section>
+</div>
 
-  <div id="chat-container"
-    style="height:400px; overflow-y:scroll; padding:1rem; margin-bottom: 1rem; background: var(--bg-primary); border-radius: 8px;">
-    <div id="mensajes-box"></div>
-  </div>
+<!-- Screen 2: Interacción y Pedidos -->
+<div id="screen-2" class="screen" aria-labelledby="screen-2-title">
+    <h1 id="screen-2-title" class="text-center">Interactúa con nosotros</h1>
+    
+    <div class="interaction-grid">
+        <!-- Lado Izquierdo: Formulario -->
+        <section class="form-container" aria-labelledby="form-title">
+            <h2 id="form-title">Pide tu canción</h2>
+            <form action="/api/pedido" method="POST" id="peticionForm">
+                <div class="form-group">
+                    <label for="nombre">Tu nombre:</label>
+                    <input type="text" id="nombre" name="nombre" placeholder="Ej: Ale">
+                </div>
+                <div class="form-group">
+                    <label for="cancion">Nombre de la canción:</label>
+                    <input type="text" id="cancion" name="cancion" placeholder="Título">
+                </div>
+                <div class="form-group">
+                    <label for="artista">Artista:</label>
+                    <input type="text" id="artista" name="artista" placeholder="Artista">
+                </div>
+                <div class="form-group">
+                    <label for="mensaje">Mensaje:</label>
+                    <textarea id="mensaje" name="mensaje" placeholder="Escribe tu saludo aquí..."></textarea>
+                </div>
+                
+                <div class="text-center" style="margin-bottom: 1.5rem;">
+                    <button type="submit" id="btn-send-text" class="btn" style="width: 100%;">
+                        <i class="fas fa-paper-plane"></i> Enviar Petición de Texto
+                    </button>
+                </div>
 
-  <form class="chat-controls chat-input-group">
-    <div style="margin-bottom: 1rem;">
-      <label for="chat-nombre">Tu nombre:</label>
-      <input type="text" id="chat-nombre" placeholder="Ej: Ale" required aria-required="true">
+                <div class="recorder-controls" style="border-top: 1px solid var(--color-royal-blue); padding-top: 1.5rem;">
+                    <p style="font-weight: 700; color: var(--color-royal-blue); margin-bottom: 1rem;">O manda una Nota de Voz:</p>
+                    <div class="recorder-btns-row" role="region" aria-label="Controles de grabación de voz">
+                        <button type="button" id="record-btn" class="btn btn-record" aria-live="polite">
+                            <i class="fas fa-microphone"></i> Iniciar grabación
+                        </button>
+                        
+                        <button type="button" id="stop-btn" class="btn btn-stop hidden" aria-label="Detener grabación">
+                            <i class="fas fa-stop"></i>
+                        </button>
+
+                        <button type="button" id="preview-btn" class="btn btn-preview hidden" aria-label="Escuchar grabación">
+                            <i class="fas fa-play"></i>
+                        </button>
+                    </div>
+
+                    <!-- Botón Enviar AUDIO únicamente -->
+                    <button type="button" id="send-audio-btn" class="btn btn-send hidden" style="width: 100%; margin-top: 1rem; background-color: var(--color-royal-blue);">
+                        <i class="fas fa-cloud-upload-alt"></i> Enviar Solo Audio
+                    </button>
+
+                    <div id="audio-preview-container" class="hidden" style="margin-top: 1rem;">
+                        <audio id="audio-preview" controls style="width: 100%;"></audio>
+                    </div>
+                </div>
+                
+                <p id="status-record" style="margin-top: 1rem; font-size: 0.9rem;" role="status"></p>
+            </form>
+        </section>
+
+        <!-- Lado Derecho: Chatbot -->
+        <section class="chatbot-container" aria-labelledby="chat-title">
+            <h2 id="chat-title">Chat en Vivo</h2>
+            <div id="chat-box" aria-live="polite">
+                <div id="mensajes-box"></div>
+            </div>
+            
+            <form class="chat-controls" style="margin-top: 1rem;">
+                <div style="display: flex; gap: 0.5rem;">
+                    <input type="text" id="chat-nombre" placeholder="Tu nombre" required style="width: 30%;">
+                    <input type="text" id="chat-msg" placeholder="Mensaje..." required style="width: 70%;">
+                </div>
+                <button type="submit" class="btn btn-chat-send" style="width: 100%; margin-top: 0.5rem;">Enviar Mensaje</button>
+            </form>
+        </section>
     </div>
 
-    <div style="margin-bottom: 1rem;">
-      <label for="chat-msg">Mensaje:</label>
-      <input type="text" id="chat-msg" placeholder="Escribe a la cabina..." required aria-required="true">
+    <div class="text-center" style="padding: 2rem;">
+        <button onclick="navigateToScreen(1)" class="btn" style="background-color: var(--color-navy); margin-right: 1rem;">
+            <i class="fas fa-arrow-left"></i> Volver
+        </button>
+        <button onclick="navigateToScreen(3)" class="btn" style="background-color: var(--color-royal-blue);">
+            Conócenos <i class="fas fa-arrow-right"></i>
+        </button>
     </div>
+</div>
 
-    <button type="submit" class="btn btn-chat-send">Enviar a Latina Live</button>
-  </form>
-</section>
+<!-- Screen 3: Redes, Donaciones y Comandos -->
+<div id="screen-3" class="screen" aria-labelledby="screen-3-title">
+    <h1 id="screen-3-title" class="text-center">Nuestra Comunidad</h1>
 
-<!-- Chat scripts handled by global init -->
+    <div style="max-width: 800px; margin: 0 auto; padding: 2rem;">
+        <section class="social-section text-center" aria-labelledby="social-title">
+            <h2 id="social-title">Redes Sociales</h2>
+            <div class="social-links">
+                <a href="https://www.facebook.com/latinalive1/?ref=embed_page#" aria-label="Facebook" target="_blank" rel="noopener"><i class="fab fa-facebook"></i></a>
+                <a href="https://www.instagram.com/latinalive1" aria-label="Instagram" target="_blank" rel="noopener"><i class="fab fa-instagram"></i></a>
+            </div>
+        </section>
 
-<section class="support-section card text-center" style="border-color: var(--brand-secondary);" role="region"
-  aria-labelledby="support-title">
-  <h2 id="support-title">¡Sueña con nosotros! 📻</h2>
-  <p>¿Te gusta nuestra sintonía? Ven con nosotros, el cielo solo es una parada; los sueños no tienen precio.</p>
-  <a href="http://paypal.me/sanaguidj" class="btn" style="background: var(--brand-secondary); margin-top: 1rem;">☁ ¡Pon
-    tu peldaño nubal aquí! 🌠</a>
-</section>
+        <section class="support-section text-center" aria-labelledby="support-title" style="margin-top: 3rem;">
+            <h2 id="support-title">Apoya nuestro proyecto</h2>
+            <p>Tu contribución nos ayuda a mantener la mejor música latina en el aire. ¡Gracias por ser parte de nuestra comunidad!</p>
+            <a href="http://paypal.me/sanaguidj" class="btn" style="margin-top: 1rem;" target="_blank" rel="noopener">
+                <i class="fas fa-heart"></i> Realizar una Donación
+            </a>
+        </section>
+
+        <section class="alexa-section" aria-labelledby="alexa-title">
+            <h2 id="alexa-title"><i class="fab fa-amazon"></i> Escúchanos en Alexa</h2>
+            <p>Solo tienes que decir:</p>
+            <blockquote style="font-size: 1.5rem; font-style: italic; margin: 1rem 0;">
+                "Alexa, abre Latina Live"
+            </blockquote>
+            <ul style="list-style: none; padding: 0;">
+                <li><i class="fas fa-check"></i> "Alexa, pon Latina Live"</li>
+                <li><i class="fas fa-check"></i> "Alexa, inicia Latina Live"</li>
+            </ul>
+            <a href="https://www.amazon.com.mx/dp/B0GLPVC67W/" class="btn" style="background-color: var(--color-white); color: var(--color-royal-blue) !important; margin-top: 1rem;" target="_blank" rel="noopener">
+                Ver Skill en Amazon
+            </a>
+        </section>
+
+
+        <div class="text-center" style="margin-top: 3rem;">
+            <button onclick="navigateToScreen(2)" class="btn" style="background-color: var(--color-navy);">
+                <i class="fas fa-arrow-left"></i> Volver a Interacción
+            </button>
+        </div>
+    </div>
+</div>
+
+<script src="/scripts/recorder.js" defer></script>

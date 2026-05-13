@@ -3,72 +3,51 @@
    ========================================= */
 
 :root {
-  /* --- Color Palette --- */
-  --bg-primary: #121212;
-  --bg-secondary: #1E1E1E;
-  --bg-tertiary: #252525;
+  /* --- New Color Palette --- */
+  --bg-cream: #FDF5E6; /* OldLace/Cream */
+  --color-royal-blue: #002366;
+  --color-navy: #000080;
+  --color-electric-blue: #007FFF;
+  --color-white: #FFFFFF;
 
-  --brand-primary: #FF4B4B;
-  /* Latina Heat */
-  --brand-primary-hover: #FF9068;
-  --brand-secondary: #1DB954;
-  /* Spotify Green */
-  --brand-gradient: linear-gradient(135deg, #FF4B4B 0%, #FF9068 100%);
+  /* --- Mapped Variables --- */
+  --bg-primary: var(--bg-cream);
+  --bg-secondary: #FAEBD7; /* AntiqueWhite for contrast */
+  --bg-tertiary: #F5F5DC;
 
-  --text-main: #E0E0E0;
-  --text-muted: #B0B0B0;
-  /* Improved contrast from A0A0A0 */
-  --text-light: #FFFFFF;
+  --brand-primary: var(--color-electric-blue);
+  --brand-secondary: var(--color-royal-blue);
+  --brand-gradient: linear-gradient(135deg, var(--color-royal-blue) 0%, var(--color-navy) 100%);
 
-  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.4);
-  --glass-bg: rgba(30, 30, 30, 0.85);
-  /* Default glass */
-  --glass-bg-scrolled: rgba(18, 18, 18, 0.98);
-  /* Less transparent on scroll */
-  --glass-border: 1px solid rgba(255, 255, 255, 0.1);
+  --text-main: var(--color-navy);
+  --text-muted: #4B4B4B;
+  --text-light: var(--color-royal-blue);
+
+  --shadow-card: 0 8px 32px rgba(0, 35, 102, 0.15);
+  --glass-bg: rgba(253, 245, 230, 0.85);
+  --glass-bg-scrolled: rgba(253, 245, 230, 0.98);
+  --glass-border: 1px solid rgba(0, 35, 102, 0.1);
   --backdrop-blur: blur(12px);
 
   /* --- Spacing & Radius --- */
   --radius-lg: 1rem;
-  /* 16px */
   --radius-pill: 3.125rem;
-  /* 50px */
   --container-width: 75rem;
-  /* 1200px */
-  --header-height: 5rem;
-  /* 80px */
+  --header-height: auto;
 }
 
-[data-theme="light"] {
-  --bg-primary: #F4F4F9;
-  --bg-secondary: #FFFFFF;
-  --bg-tertiary: #EAEAEA;
-  --brand-primary: #DE3131;
-  /* Darkened for accessibility contrast 4.5:1 */
-  --text-main: #333333;
-  --text-muted: #666666;
-  --text-light: #121212;
-  /* In light mode, headings are dark */
-  --glass-bg: rgba(255, 255, 255, 0.85);
-  --glass-bg-scrolled: rgba(255, 255, 255, 0.98);
-  --glass-border: 1px solid rgba(0, 0, 0, 0.1);
-  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
+/* Light/Dark theme overrides removed as per new static design requirements, 
+   but keeping the data-theme structure if needed for future extensions, 
+   currently mapping both to the new palette. */
+[data-theme="light"], [data-theme="dark"] {
+  --bg-primary: var(--bg-cream);
+  --text-main: var(--color-navy);
+  --text-light: var(--color-royal-blue);
 }
 
 /* --- Reset & Base --- */
 * {
   box-sizing: border-box;
-}
-
-html {
-  font-size: 100%;
-  /* Base 16px */
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  html {
-    scroll-behavior: smooth;
-  }
 }
 
 body {
@@ -78,466 +57,271 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-main);
   line-height: 1.7;
-  /* Increased for readability */
   font-size: 1.125rem;
-  /* ~18px base size */
-}
-
-/* Accessibility: Focus Indicators */
-*:focus-visible {
-  outline: 0.1875rem solid var(--brand-primary);
-  /* 3px */
-  outline-offset: 0.25rem;
-  /* 4px */
-  border-radius: 0.25rem;
-  /* 4px */
-}
-
-a {
-  color: var(--brand-primary);
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: var(--brand-primary-hover);
-}
-
-/* Typography */
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  color: var(--text-light);
-  margin-top: 0;
-  margin-bottom: 1rem;
-  font-weight: 700;
-  line-height: 1.2;
-}
-
-h1 {
-  font-size: 2.5rem;
-}
-
-h2 {
-  font-size: 2rem;
-}
-
-h3 {
-  font-size: 1.5rem;
-}
-
-img {
-  max-width: 100%;
-  display: block;
-  height: auto;
-}
-
-/* Skip Link */
-.skip-link {
-  position: absolute;
-  top: -2.5rem;
-  /* -40px */
-  left: 0;
-  background: var(--brand-primary);
-  color: white;
-  padding: 0.5rem;
-  /* 8px */
-  z-index: 2000;
-  transition: top 0.3s;
-}
-
-.skip-link:focus {
-  top: 0;
-}
-
-/* --- Layout --- */
-main {
-  max-width: var(--container-width);
-  margin: 0 auto;
-  padding: 2rem 1rem;
-}
-
-section {
-  margin-bottom: 4rem;
-  /* Increased spacing */
-}
-
-/* --- Header / Hero --- */
-header.welcome-section {
-  text-align: center;
-  padding: 4rem 1rem;
-  background: radial-gradient(circle at center, #2a2a2a 0%, var(--bg-primary) 70%);
-}
-
-[data-theme="light"] header.welcome-section {
-  background: radial-gradient(circle at center, #e0e0e0 0%, var(--bg-primary) 70%);
-}
-
-header.welcome-section img {
-  width: 11.25rem;
-  /* 180px */
-  height: 11.25rem;
-  /* 180px */
-  border-radius: 50%;
-  margin: 0 auto 1.5rem;
-  border: 0.25rem solid var(--brand-primary);
-  /* 4px */
-  box-shadow: 0 0 1.5625rem rgba(255, 75, 75, 0.4);
-  /* 0 0 25px */
-}
-
-header.welcome-section h2,
-header.welcome-section .h2-style {
-  font-size: 3rem;
-  margin-bottom: 0.5rem;
-  color: var(--brand-primary);
-  /* Solid color for accessibility */
-  text-shadow: 0 0.125rem 0.5rem rgba(255, 75, 75, 0.3);
-  font-weight: 700;
-}
-
-/* --- Navigation --- */
-.site-nav {
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  /* Keep as integer */
-  background: var(--glass-bg);
-  backdrop-filter: var(--backdrop-blur);
-  border-bottom: var(--glass-border);
-  padding: 1rem 0;
-  transition: background 0.3s ease, padding 0.3s ease, box-shadow 0.3s ease;
-}
-
-.site-nav.scrolled {
-  background: var(--glass-bg-scrolled);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-  padding: 0.5rem 0;
-}
-
-.site-nav ul {
-  list-style: none;
   display: flex;
-  justify-content: center;
-  gap: 2.5rem;
-  margin: 0;
-  padding: 0;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
-.site-nav a {
-  color: var(--text-light);
-  font-weight: 600;
-  font-size: 1.1rem;
-  padding: 0.5rem 0;
-  /* Removing side padding for cleaner underline */
-  position: relative;
+/* --- SPA Layout --- */
+.screen {
+  display: none;
+  animation: fadeIn 0.5s ease-in-out;
 }
 
-[data-theme="light"] .site-nav a {
-  color: var(--text-main);
+.screen.active {
+  display: block;
 }
 
-.site-nav a::after {
-  content: '';
-  position: absolute;
-  width: 0;
-  height: 0.1875rem;
-  /* 3px */
-  bottom: -0.25rem;
-  /* -4px */
-  left: 0;
-  background: var(--brand-gradient);
-  transition: width 0.3s ease;
-  border-radius: 0.125rem;
-  /* 2px */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.site-nav a:hover::after,
-.site-nav a:focus::after {
+/* --- Header (Identity) --- */
+.site-header {
   width: 100%;
+  padding: 2rem 1rem;
+  text-align: center;
 }
 
-/* --- Components: Buttons --- */
-button,
+.site-header img {
+  max-width: 300px;
+  width: 100%;
+  height: auto;
+  margin: 0 auto;
+  display: block;
+}
+
+.slogan {
+  font-size: 1.5rem;
+  color: var(--color-royal-blue);
+  font-weight: 600;
+  margin-top: 1rem;
+}
+
+/* --- Navigation & Buttons --- */
 .btn {
   display: inline-block;
-  background: var(--brand-gradient);
-  color: #fff !important;
-  /* Force text white on buttons */
+  background-color: var(--color-electric-blue);
+  color: var(--color-white) !important;
   border: none;
-  padding: 1rem 2.5rem;
+  padding: 1rem 2rem;
   font-size: 1.1rem;
   font-weight: 700;
   border-radius: var(--radius-pill);
   cursor: pointer;
-  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.2s;
-  box-shadow: 0 4px 15px rgba(255, 75, 75, 0.3);
+  transition: all 0.3s ease;
+  text-decoration: none;
   text-align: center;
 }
 
-button:hover,
 .btn:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 8px 25px rgba(255, 75, 75, 0.5);
+  background-color: var(--color-royal-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 127, 255, 0.4);
 }
 
-button:active,
-.btn:active {
-  transform: translateY(-1px);
-}
-
-/* --- Components: Cards --- */
-.card,
-.player-container {
-  background: var(--bg-secondary);
-  border-radius: var(--radius-lg);
-  padding: 3rem 2rem;
-  box-shadow: var(--shadow-card);
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  transition: transform 0.3s ease, border-color 0.3s ease;
-}
-
-[data-theme="light"] .card {
-  border: 1px solid rgba(0, 0, 0, 0.05);
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  border-color: var(--brand-primary);
-}
-
-/* --- Player --- */
-.player-container {
-  border-left: 5px solid var(--brand-primary);
-  margin: 2rem auto 5rem;
-  max-width: 900px;
-}
-
-.player-container h1 {
-  font-size: 2.2rem;
-  margin-bottom: 1rem;
-  color: var(--text-light);
-}
-
-.audio-player {
+/* --- Screen 1: Player --- */
+.player-controls {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-  margin-top: 1.5rem;
-}
-
-audio {
-  width: 100%;
-  height: 2.5rem;
-  /* 40px */
-  border-radius: var(--radius-pill);
-}
-
-/* Invert filter is a bit hacky, prefer custom controls if possible, but keeping for now */
-[data-theme="dark"] audio {
-  filter: invert(0.9) hue-rotate(180deg);
-}
-
-/* --- Spotify Grid / Trends --- */
-#dynamic-trends ul {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
   gap: 2rem;
-  list-style: none;
-  padding: 0;
+  padding: 2rem;
 }
 
-#dynamic-trends li {
-  background: var(--bg-tertiary);
-  padding: 1.5rem;
-  border-radius: var(--radius-lg);
-  transition: background 0.3s, transform 0.3s;
-}
-
-#dynamic-trends li:hover {
-  background: var(--bg-primary);
-  transform: translateY(-5px);
-}
-
-#dynamic-trends img {
-  width: 100%;
-  border-radius: 0.75rem;
-  /* 12px */
-  margin-bottom: 1rem;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-}
-
-/* --- Support / Donate --- */
-.support-section {
-  border-color: var(--brand-secondary) !important;
-  border-width: 0.125rem;
-  /* 2px */
-  border-style: solid;
-}
-
-/* --- Footer --- */
-.site-footer {
-  text-align: center;
-  padding: 3rem 1rem;
-  background: var(--bg-secondary);
-  border-top: 0.0625rem solid rgba(255, 255, 255, 0.1);
-  /* 1px */
-  color: var(--text-muted);
-}
-
-[data-theme="light"] .site-footer {
-  border-top: 0.0625rem solid rgba(0, 0, 0, 0.1);
-  /* 1px */
-}
-
-.site-footer a {
-  color: var(--text-main);
-  /* Better contrast */
-  text-decoration: underline;
-  margin: 0 0.5rem;
-}
-
-.site-footer a:hover {
-  color: var(--brand-primary);
-}
-
-/* --- Utilities --- */
-.hidden {
-  display: none !important;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.mb-4 {
-  margin-bottom: 1.5rem;
-}
-
-/* Theme Toggle Button */
-.theme-toggle-btn {
-  position: fixed;
-  bottom: 1.25rem;
-  /* 20px */
-  right: 1.25rem;
-  /* 20px */
-  background: var(--bg-secondary);
-  color: var(--text-main);
-  border: 0.125rem solid var(--brand-primary);
-  /* 2px */
-  border-radius: 50%;
-  width: 3.125rem;
-  /* 50px */
-  height: 3.125rem;
-  /* 50px */
+.row-controls {
   display: flex;
   align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
   justify-content: center;
-  font-size: 1.5rem;
-  cursor: pointer;
-  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.3);
-  /* 0 4px 10px */
-  z-index: 2000;
-  padding: 0;
 }
 
-.theme-toggle-btn:hover {
-  transform: scale(1.1);
+.volume-slider {
+  width: 200px;
+  accent-color: var(--color-electric-blue);
 }
 
-/* --- Chat Section Improved --- */
-#chat-container {
-  background: var(--bg-secondary) !important;
-  color: var(--text-main);
-  border: 0.125rem solid var(--brand-primary) !important;
-  border-radius: var(--radius-lg);
-  padding: 1.5rem;
-  box-shadow: var(--shadow-card);
+/* --- Screen 2: Interaction --- */
+.interaction-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  padding: 2rem;
 }
 
-/* Cuadro de Flujo (Textarea Solo Lectura) */
-#flujo-chat {
-  background: var(--bg-primary) !important;
-  color: var(--text-main);
-  border: 0.0625rem solid rgba(255, 255, 255, 0.2);
-  width: 100%;
-  height: 22rem;
-  font-family: 'Montserrat', sans-serif;
-  font-size: 1rem;
-  line-height: 1.6;
-  padding: 1rem;
-  border-radius: 0.5rem;
-  resize: none;
+@media (max-width: 768px) {
+  .interaction-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
   margin-bottom: 1.5rem;
-  scroll-behavior: smooth;
 }
 
-/* Inputs y Labels */
-.chat-input-group label {
+.form-group label {
   display: block;
   font-weight: 700;
-  font-size: 0.9rem;
-  color: var(--brand-primary);
+  color: var(--color-royal-blue);
   margin-bottom: 0.5rem;
-  text-transform: uppercase;
 }
 
-input[type="text"],
-input[type="email"],
-textarea {
-  background: var(--bg-primary);
-  color: var(--text-main);
-  border: 0.0625rem solid rgba(255, 255, 255, 0.1);
-  padding: 0.8rem 1rem;
+input, textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid var(--color-royal-blue);
   border-radius: 0.5rem;
-  width: 100%;
-  font-family: inherit;
+  background: var(--color-white);
+  color: var(--color-navy);
+}
+
+.chatbot-container {
+  border: 2px solid var(--color-royal-blue);
+  border-radius: 1rem;
+  padding: 1rem;
+  background: var(--color-white);
+  height: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+#chat-box {
+  flex-grow: 1;
+  overflow-y: auto;
   margin-bottom: 1rem;
-  transition: border-color 0.3s ease;
+  padding: 0.5rem;
 }
 
-/* Enfoque de alta visibilidad para Chat */
-#flujo-chat:focus,
-input:focus,
-textarea:focus {
-  outline: 0.25rem solid var(--brand-secondary) !important;
-  outline-offset: 0.125rem;
-  border-color: transparent;
+/* --- Screen 3: Social & More --- */
+.social-links {
+  display: flex;
+  justify-content: center;
+  gap: 2rem;
+  font-size: 2rem;
+  margin: 2rem 0;
 }
 
-.btn-chat-send {
+.social-links a {
+  color: var(--color-royal-blue);
+  transition: color 0.3s;
+}
+
+.social-links a:hover {
+  color: var(--color-electric-blue);
+}
+
+.alexa-section {
+  background: var(--color-royal-blue);
+  color: var(--color-white);
+  padding: 2rem;
+  border-radius: 1rem;
+  margin: 2rem 0;
+}
+
+.alexa-section h2 {
+  color: var(--color-white);
+}
+
+/* --- Persistent Mini Player Control --- */
+.persistent-controls {
+  position: fixed;
+  bottom: 0;
+  left: 0;
   width: 100%;
-  background: var(--brand-secondary) !important;
-  margin-top: 0.5rem;
+  background: var(--color-royal-blue);
+  color: var(--color-white);
+  padding: 0.75rem 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 1000;
+  box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.2);
 }
 
-.btn-chat-send:hover {
-  background: #1ed760 !important;
-  box-shadow: 0 0.5rem 1.56rem rgba(29, 185, 84, 0.4);
+.mini-info {
+  display: flex;
+  flex-direction: column;
+  font-size: 0.85rem;
 }
 
-/* Responsive */
-@media (max-width: 768px) {
-  .site-nav ul {
-    flex-direction: column;
-    gap: 1rem;
-    align-items: center;
-    padding: 1rem;
-  }
+.mini-btns {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
 
-  header.welcome-section h2 {
-    font-size: 2.2rem;
-  }
+.btn-mini {
+  background: var(--color-electric-blue);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 0.8rem;
+}
 
-  h1 {
-    font-size: 2rem;
-  }
+/* --- Refined Voice Recorder UI --- */
+.recorder-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-top: 1rem;
+}
 
-  .player-container {
-    padding: 1.5rem;
-  }
+.recorder-btns-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.btn-record { background-color: var(--color-navy); }
+.btn-pause { background-color: #f39c12; }
+.btn-stop { background-color: #e74c3c; }
+.btn-preview { background-color: var(--color-royal-blue); }
+.btn-send { background-color: var(--color-electric-blue); }
+
+#record-btn.recording {
+  animation: pulse-red 1.5s infinite;
+}
+
+#audio-preview-container {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: var(--bg-tertiary);
+  border-radius: 0.5rem;
+  border: 1px dashed var(--color-royal-blue);
+}
+
+#status-record {
+  font-weight: 600;
+  min-height: 1.5rem;
+  transition: all 0.3s ease;
+}
+
+.recording-indicator {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  background-color: red;
+  border-radius: 50%;
+  margin-right: 5px;
+}
+
+/* --- Footer Adjustments --- */
+.site-footer {
+  margin-top: auto;
+  padding: 2rem 2rem 5rem 2rem; /* Added bottom padding for mini-player */
+  text-align: center;
+  border-top: 1px solid var(--color-royal-blue);
+  color: var(--color-navy);
+}
+
+
+/* --- Typography --- */
+h1, h2, h3 {
+  color: var(--color-royal-blue);
 }
