@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const playPauseBtn = document.getElementById('playPauseBtn');
     const miniPlayPauseBtn = document.getElementById('miniPlayPauseBtn');
     const volumeSlider = document.getElementById('volumeSlider');
+    const miniVolumeSlider = document.getElementById('miniVolumeSlider');
     const trackInfo = document.getElementById('track-info');
     const miniTrack = document.getElementById('mini-track');
     const miniLocutor = document.getElementById('mini-locutor');
@@ -37,12 +38,24 @@ document.addEventListener('DOMContentLoaded', () => {
         if(miniPlayPauseBtn) miniPlayPauseBtn.innerHTML = miniPlayHTML;
     });
 
-    // Volume Slider Logic
-    if (volumeSlider && audio) {
-        volumeSlider.addEventListener('input', (e) => {
-            audio.volume = e.target.value;
-        });
-        volumeSlider.value = audio.volume;
+    // Volume Logic
+    if (audio) {
+        audio.volume = 0.3; // Seteado a 30% por defecto
+        
+        const syncVolume = (val) => {
+            audio.volume = val;
+            if(volumeSlider) volumeSlider.value = val;
+            if(miniVolumeSlider) miniVolumeSlider.value = val;
+        };
+
+        if (volumeSlider) {
+            volumeSlider.value = 0.3;
+            volumeSlider.addEventListener('input', (e) => syncVolume(e.target.value));
+        }
+        if (miniVolumeSlider) {
+            miniVolumeSlider.value = 0.3;
+            miniVolumeSlider.addEventListener('input', (e) => syncVolume(e.target.value));
+        }
     }
 
     // Keyboard Shortcuts
@@ -60,11 +73,13 @@ document.addEventListener('DOMContentLoaded', () => {
                 e.preventDefault();
                 audio.volume = Math.min(1, audio.volume + 0.1);
                 if(volumeSlider) volumeSlider.value = audio.volume;
+                if(miniVolumeSlider) miniVolumeSlider.value = audio.volume;
                 break;
             case 'ArrowDown':
                 e.preventDefault();
                 audio.volume = Math.max(0, audio.volume - 0.1);
                 if(volumeSlider) volumeSlider.value = audio.volume;
+                if(miniVolumeSlider) miniVolumeSlider.value = audio.volume;
                 break;
         }
     });

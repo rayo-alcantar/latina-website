@@ -57,7 +57,11 @@
             <span id="mini-locutor" style="font-weight: bold;">Latina Live</span>
             <span id="mini-track" style="font-size: 0.75rem; opacity: 0.8;">Sintonizando...</span>
         </div>
-        <div class="mini-btns">
+        <div class="mini-btns" style="display: flex; align-items: center; gap: 0.8rem;">
+            <div class="mini-volume" style="display: flex; align-items: center; gap: 0.4rem;">
+                <i class="fas fa-volume-up" style="font-size: 0.8rem;"></i>
+                <input type="range" id="miniVolumeSlider" min="0" max="1" step="0.01" value="0.3" aria-label="Volumen mini" style="width: 60px;">
+            </div>
             <button id="miniPlayPauseBtn" class="btn-mini" aria-label="Reproducir / Pausar">
                 <i class="fas fa-play"></i>
             </button>
