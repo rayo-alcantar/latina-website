@@ -1,5 +1,5 @@
 export async function initChat() {
-    const chatContainer = document.getElementById('chat-container');
+    const chatContainer = document.getElementById('chat-box');
     if (!chatContainer) return;
 
     const chatForm = document.querySelector('.chat-controls');
@@ -33,61 +33,105 @@ async function enviarMensaje() {
     }
 
     try {
-        // ACTUALIZACIÓN: Usamos la ruta dedicada al chat que creamos en el servidor
-        const response = await fetch('/api/enviar-web', {
+        // RESTAURADO: Ruta absoluta
+        const response = await fetch('https://latinalive.net/api/enviar-web', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ 
-                usuario: usuario, // Cambiado de 'nombre' a 'usuario' para coincidir con el servidor
+                usuario: usuario,
                 mensaje: mensaje
             })
         });
 
-        // El servidor ahora responde con res.json({ status: 'ok' })
         if (response.ok) {
             mensajeInput.value = '';
             await cargarChat();
-        } else {
-            alert("No se pudo enviar el mensaje al chat.");
         }
     } catch (e) {
         console.error("Error al enviar mensaje", e);
     } finally {
         if (submitBtn) {
             submitBtn.disabled = false;
-            submitBtn.textContent = "Enviar a Latina Live";
+            submitBtn.textContent = "Enviar Mensaje";
         }
         mensajeInput.focus();
     }
 }
 
-let lastMessageCount = 0;
+let lastMessageId = null; // Usaremos una combinación de fecha y mensaje como ID único temporal
+let isInitialLoad = true;
 
 async function cargarChat() {
     try {
         const box = document.getElementById('mensajes-box');
         if (!box) return;
 
-        const res = await fetch('/api/leer-chat');
+        const res = await fetch('https://latinalive.net/api/leer-chat');
+        if (!res.ok) return;
+        
         const mensajes = await res.json(); 
+        
+        if (mensajes.length === 0) return;
 
-        lastMessageCount = mensajes.length;
+        // Si es la primera carga, mostramos todo
+        if (isInitialLoad) {
+            box.innerHTML = mensajes.map(m => renderMessage(m)).join('');
+            const lastM = mensajes[mensajes.length - 1];
+            lastMessageId = `${lastM.fecha}-${lastM.mensaje}`;
+            isInitialLoad = false;
+            scrollToBottom();
+            return;
+        }
 
-        box.innerHTML = mensajes.map(m => {
-            const timeStr = m.fecha || ''; 
-            const timestampHTML = timeStr ? `<small style="color: var(--brand-primary); margin-right: 0.5rem;">[${timeStr}]</small>` : '';
+        // Buscamos el índice del último mensaje que ya tenemos
+        let index = -1;
+        for (let i = mensajes.length - 1; i >= 0; i--) {
+            if (`${mensajes[i].fecha}-${mensajes[i].mensaje}` === lastMessageId) {
+                index = i;
+                break;
+            }
+        }
 
-            return `
-            <p style="margin-bottom: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(255,255,255,0.05);">
-                ${timestampHTML} 
-                <strong>${m.usuario}:</strong> 
-                <span style="color: var(--text-main);">${m.mensaje}</span>
-            </p>
-            `;
-        }).join('');
+        // Si no encontramos el último mensaje (ej: chat vaciado), mostramos todo de nuevo
+        if (index === -1 && lastMessageId !== null) {
+            box.innerHTML = mensajes.map(m => renderMessage(m)).join('');
+        } else {
+            // Añadimos solo lo nuevo
+            const nuevos = mensajes.slice(index + 1);
+            if (nuevos.length > 0) {
+                nuevos.forEach(m => {
+                    const temp = document.createElement('div');
+                    temp.innerHTML = renderMessage(m);
+                    box.appendChild(temp.firstElementChild);
+                });
+            }
+        }
 
-        box.scrollTop = box.scrollHeight;
+        const lastM = mensajes[mensajes.length - 1];
+        lastMessageId = `${lastM.fecha}-${lastM.mensaje}`;
+        scrollToBottom();
+
     } catch (e) {
         console.error("Error cargando el chat", e);
     }
 }
+
+
+function renderMessage(m) {
+    const timeStr = m.fecha || ''; 
+    const timestampHTML = timeStr ? `<small style="color: var(--color-royal-blue); margin-right: 0.5rem;">[${timeStr}]</small>` : '';
+
+    return `
+    <p style="margin-bottom: 0.5rem; padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.05);">
+        ${timestampHTML} 
+        <strong style="color: var(--color-royal-blue);">${m.usuario}:</strong> 
+        <span style="color: var(--color-navy);">${m.mensaje}</span>
+    </p>
+    `;
+}
+
+function scrollToBottom() {
+    const chatBox = document.getElementById('chat-box');
+    if(chatBox) chatBox.scrollTop = chatBox.scrollHeight;
+}
+
